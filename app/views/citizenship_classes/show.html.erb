@@ -1,29 +1,40 @@
-<p id="notice"><%= notice %></p>
+<% if notice %>
+<div class="alert alert-success">
+  <p id="notice"><%= notice %></p>
+</div>
+<% end %>
 
-<p>
-  <b>Name:</b>
-  <%= @citizenship_class.name %>
-</p>
+<div class="panel panel-default">
+  <div class="panel-heading">
+	<h4>Citizenship Class</h4>
+  </div>
+  <div class="panel-body">
+	<p>
+	  <b>Name:</b>
+	  <%= @citizenship_class.name %>
+	</p>
 
-<p>
-  <b>Instructor:</b>
-  <%= @citizenship_class.instructor %>
-</p>
+	<p>
+	  <b>Instructor:</b>
+	  <%= @citizenship_class.instructor %>
+	</p>
 
-<p>
-  <b>Delivery date:</b>
-  <%= @citizenship_class.delivery_date %>
-</p>
+	<p>
+	  <b>Delivery date:</b>
+	  <%= @citizenship_class.delivery_date %>
+	</p>
 
-<p>
-  <b>Hours:</b>
-  <%= @citizenship_class.hours %>
-</p>
+	<p>
+	  <b>Hours:</b>
+	  <%= @citizenship_class.hours %>
+	</p>
 
-<p>
-  <b>Grantee:</b>
-  <%= @citizenship_class.grantee.name %>
-</p>
+	<p>
+	  <b>Grantee:</b>
+	  <%= @citizenship_class.grantee.name %>
+	</p>
+  </div>
+</div>
 
 
 <%= link_to 'Edit', edit_grantee_citizenship_class_path(@grantee, @citizenship_class) %> |

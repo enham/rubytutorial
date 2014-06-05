@@ -1,30 +1,42 @@
-<p id="notice"><%= notice %></p>
+<% if notice %>
+<div class="alert alert-success">
+  <p id="notice"><%= notice %></p>
+</div>
+<% end %>
 
-<p>
-  <b>Name:</b>
-  <%= @grantee.name %>
-</p>
 
-<p>
-  <b>Address:</b>
-  <%= @grantee.address %>
-</p>
+<div class="panel panel-default">
+  <div class="panel-heading">
+	<h4>Grantee</h4>
+  </div>
+  <div class="panel-body">
+	<p>
+	  <b>Name:</b>
+	  <%= @grantee.name %>
+	</p>
 
-<p>
-  <b>Grant amount:</b>
-  <%= @grantee.grant_amount %>
-</p>
+	<p>
+	  <b>Address:</b>
+	  <%= @grantee.address %>
+	</p>
 
-<p>
-  <b>Grant date:</b>
-  <%= @grantee.grant_date %>
-</p>
+	<p>
+	  <b>Grant amount:</b>
+	  <%= @grantee.grant_amount %>
+	</p>
+
+	<p>
+	  <b>Grant date:</b>
+	  <%= @grantee.grant_date %>
+	</p>
+  </div>
+</div>
 
 
 <%= link_to 'Edit', edit_grantee_path(@grantee) %> |
 <%= link_to 'Back', grantees_path %>
-
-<h1>Listing citizenship_classes</h1>
+<br/><br/><br/><br/>
+<h4>Grantee's Citizenship Classes</h4>
 
 <table class="table">
   <tr>
@@ -52,4 +64,4 @@
 
 <br />
 
-<%= link_to 'New Citizenship class', new_grantee_citizenship_class_path(@grantee) %>
+<%= link_to 'New Citizenship Class', new_grantee_citizenship_class_path(@grantee) %>

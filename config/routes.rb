@@ -1,6 +1,6 @@
 Rubydemo::Application.routes.draw do
 
-  root :to => "[grantees]#index"
+  root :to => "grantees#index"
 
   resources :grantees do
     resources :citizenship_classes
