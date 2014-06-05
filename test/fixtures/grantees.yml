@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  address: MyString
+  grant_amount: 1
+  grant_date: 2014-06-05
+
+two:
+  name: MyString
+  address: MyString
+  grant_amount: 1
+  grant_date: 2014-06-05

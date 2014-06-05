@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  instructor: MyString
+  delivery_date: 2014-06-05
+  hours: 1
+  grantee: 
+
+two:
+  name: MyString
+  instructor: MyString
+  delivery_date: 2014-06-05
+  hours: 1
+  grantee: 

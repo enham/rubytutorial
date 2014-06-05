@@ -1,0 +1,31 @@
+<h1>Listing citizenship_classes</h1>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Instructor</th>
+    <th>Delivery date</th>
+    <th>Hours</th>
+    <th>Grantee</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @citizenship_classes.each do |citizenship_class| %>
+  <tr>
+    <td><%= citizenship_class.name %></td>
+    <td><%= citizenship_class.instructor %></td>
+    <td><%= citizenship_class.delivery_date %></td>
+    <td><%= citizenship_class.hours %></td>
+    <td><%= citizenship_class.grantee %></td>
+    <td><%= link_to 'Show', grantee_citizenship_classes_path(@grantee, citizenship_class) %></td>
+    <td><%= link_to 'Edit', edit_grantee_citizenship_class_path(@grantee, citizenship_class) %></td>
+    <td><%= link_to 'Destroy', [@grantee, citizenship_class], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Citizenship class', new_grantee_citizenship_class_path(@grantee) %>

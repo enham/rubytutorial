@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @grantee.name %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @grantee.address %>
+</p>
+
+<p>
+  <b>Grant amount:</b>
+  <%= @grantee.grant_amount %>
+</p>
+
+<p>
+  <b>Grant date:</b>
+  <%= @grantee.grant_date %>
+</p>
+
+
+<%= link_to 'Edit', edit_grantee_path(@grantee) %> |
+<%= link_to 'Back', grantees_path %>
+
+<h1>Listing citizenship_classes</h1>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Instructor</th>
+    <th>Delivery date</th>
+    <th>Hours</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @citizenship_classes.each do |citizenship_class| %>
+  <tr>
+    <td><%= citizenship_class.name %></td>
+    <td><%= citizenship_class.instructor %></td>
+    <td><%= citizenship_class.delivery_date %></td>
+    <td><%= citizenship_class.hours %></td>
+    <td><%= link_to 'Show', grantee_citizenship_class_path(@grantee, citizenship_class) %></td>
+    <td><%= link_to 'Edit', edit_grantee_citizenship_class_path(@grantee, citizenship_class) %></td>
+    <td><%= link_to 'Destroy', [@grantee, citizenship_class], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Citizenship class', new_grantee_citizenship_class_path(@grantee) %>

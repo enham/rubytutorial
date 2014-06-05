@@ -1,4 +1,11 @@
 Rubydemo::Application.routes.draw do
+
+
+  resources :grantees do
+    resources :citizenship_classes
+  end
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
