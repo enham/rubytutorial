@@ -38,28 +38,32 @@
 <br/><br/><br/><br/>
 <h4>Grantee's Citizenship Classes</h4>
 
-<table class="table">
-  <tr>
-    <th>Name</th>
-    <th>Instructor</th>
-    <th>Delivery date</th>
-    <th>Hours</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Instructor</th>
+      <th>Delivery date</th>
+      <th>Hours</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
 
+  <tbody>
 <% @citizenship_classes.each do |citizenship_class| %>
-  <tr>
-    <td><%= citizenship_class.name %></td>
-    <td><%= citizenship_class.instructor %></td>
-    <td><%= citizenship_class.delivery_date %></td>
-    <td><%= citizenship_class.hours %></td>
-    <td><%= link_to 'Show', grantee_citizenship_class_path(@grantee, citizenship_class) %></td>
-    <td><%= link_to 'Edit', edit_grantee_citizenship_class_path(@grantee, citizenship_class) %></td>
-    <td><%= link_to 'Destroy', [@grantee, citizenship_class], method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+    <tr>
+      <td><%= citizenship_class.name %></td>
+      <td><%= citizenship_class.instructor %></td>
+      <td><%= citizenship_class.delivery_date %></td>
+      <td><%= citizenship_class.hours %></td>
+      <td><%= link_to 'Show', grantee_citizenship_class_path(@grantee, citizenship_class) %></td>
+      <td><%= link_to 'Edit', edit_grantee_citizenship_class_path(@grantee, citizenship_class) %></td>
+      <td><%= link_to 'Destroy', [@grantee, citizenship_class], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
 <% end %>
+  </tbody>
 </table>
 
 <br />

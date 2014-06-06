@@ -1,27 +1,30 @@
 <h2>Grantee Management</h2>
 
-<table class="table">
-  <tr>
-    <th>Name</th>
-    <th>Address</th>
-    <th>Grant amount</th>
-    <th>Grant date</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Grant amount</th>
+      <th>Grant date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
 <% @grantees.each do |grantee| %>
-  <tr>
-    <td><%= grantee.name %></td>
-    <td><%= grantee.address %></td>
-    <td><%= grantee.grant_amount %></td>
-    <td><%= grantee.grant_date %></td>
-    <td><%= link_to 'Show', grantee %></td>
-    <td><%= link_to 'Edit', edit_grantee_path(grantee) %></td>
-    <td><%= link_to 'Destroy', grantee, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+    <tr>
+      <td><%= grantee.name %></td>
+      <td><%= grantee.address %></td>
+      <td><%= grantee.grant_amount %></td>
+      <td><%= grantee.grant_date %></td>
+      <td><%= link_to 'Show', grantee %></td>
+      <td><%= link_to 'Edit', edit_grantee_path(grantee) %></td>
+      <td><%= link_to 'Destroy', grantee, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
 <% end %>
+  </tbody>
 </table>
 
 <br />
