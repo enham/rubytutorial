@@ -1,5 +1,7 @@
 Rubydemo::Application.routes.draw do
 
+  devise_for :users
+
   root :to => "grantees#index"
 
   resources :grantees do

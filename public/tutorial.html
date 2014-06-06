@@ -47,7 +47,7 @@
 	  <div class="starter-template">
         <h2>Tutorial</h2>
 		<div class="bg-classes bg-success">
-		  <p>Code for this demo can be found at <a href="https://github.com/enham/rubydemo" target="_new">https://github.com/enham/rubydemo</a></p>.
+		  <p>Code for this demo can be found at <a href="https://github.com/enham/rubydemo" target="_new">https://github.com/enham/rubydemo</a>. Make sure to <code>bundle install</code> to resolve any platform dependencies before pushing to OpenShift.</p>
 		</div>
 		<br/>
 		<div class="bg-classes bg-info">
@@ -144,6 +144,7 @@ production:
           </li>
 		  <li>Modify your entity views to use the bootstrap styles (in app/views/[entity] directories). Some examples are available here: <a href="http://getbootstrap.com/css/" target="_new">http://getbootstrap.com/css/</a></li>
 		  <li>For this demo, I created a nested object in Rails. This is fairly complex. This guide summarizes it but some additional changes will probably have to be made to make it work: <a href="https://gist.github.com/jhjguxin/3074080" target="_new">https://gist.github.com/jhjguxin/3074080</a>. To add a child entity, you can use the following scaffolding syntax: <code>rails g scaffold [childentity] [fields:types] [parent:references]</code></li>
+		  <li>To add login, follow the steps in this tutorial: <a href="http://guides.railsgirls.com/devise/" target="_new">http://guides.railsgirls.com/devise/</a>. One correction: in step 6, I had to use <code>before_action</code> not <code>before_filter</code>.</li>
 		</ol>
 	  </div>
 	</div>
