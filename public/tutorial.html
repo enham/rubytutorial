@@ -46,6 +46,10 @@
 	<div class="container">
 	  <div class="starter-template">
         <h2>Tutorial</h2>
+		<div class="bg-classes bg-success">
+		  <p>Code for this demo can be found at <a href="https://github.com/enham/rubydemo" target="_new">https://github.com/enham/rubydemo</a></p>.
+		</div>
+		<br/>
 		<div class="bg-classes bg-info">
 		  <p><strong>Pre-requisites:</strong> The following software should be installed and available in your local environment:</p>
 		  <ul>
@@ -53,7 +57,7 @@
 			<li>Rails 3.2.x (if rvm is available, use <code>rvm use ruby-1.9.3</code> command to manage versions and dependencies)</li>
 			<li>rhc (<code>gem install rhc</code>)</li>
 		  </ul>
-		  <p>Also, please note that many aspects of Ruby are platform dependent. If you are using Windows, it may implicitly declare gems in your Gemfile.lock that are Windows-specific and some gems may not work altogether. For this reason, we recommend using a <strong>Linux platform</strong>.
+		  <p>Also, please note that many aspects of Ruby are platform dependent. If you are using Windows, it may implicitly declare gems in your Gemfile.lock that are Windows-specific and some gems may not work altogether. For this reason, we recommend using a <strong>Linux platform</strong>.</p>
 		</div>
 		<br/>
 		<ol>
@@ -138,8 +142,8 @@ production:
 &lt;script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"&gt;&lt;/script&gt;
 </pre>
           </li>
-		  <li>Modify your entity views to use the bootstrap styles (in app/views/[entity] directories). Some examples are available here: <a href="http://getbootstrap.com/css/">http://getbootstrap.com/css/</a></li>
-		  <li>For this demo, I created a nested object in Rails. This is fairly complex. This guide summarizes it but some additional changes will probably have to be made to make it work: <a href="https://gist.github.com/jhjguxin/3074080">https://gist.github.com/jhjguxin/3074080</a>. To add a child entity, you can use the following scaffolding syntax: <code>rails g scaffold [childentity] [fields:types] [parent:references]</code></li>
+		  <li>Modify your entity views to use the bootstrap styles (in app/views/[entity] directories). Some examples are available here: <a href="http://getbootstrap.com/css/" target="_new">http://getbootstrap.com/css/</a></li>
+		  <li>For this demo, I created a nested object in Rails. This is fairly complex. This guide summarizes it but some additional changes will probably have to be made to make it work: <a href="https://gist.github.com/jhjguxin/3074080" target="_new">https://gist.github.com/jhjguxin/3074080</a>. To add a child entity, you can use the following scaffolding syntax: <code>rails g scaffold [childentity] [fields:types] [parent:references]</code></li>
 		</ol>
 	  </div>
 	</div>
