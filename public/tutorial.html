@@ -63,7 +63,7 @@
 		<ol>
 		  <li>Create new directory.</li>
 		  <li>Execute <code>rhc setup --server=[url]</code> (make sure to use https if applicable). Enter your username/password if prompted.</li>
-		  <li>Execute <code>rhc app create [appname] ruby-1.9 postgresql-9.2</code>. Behind the scenes it will uses the REST API to communicate with OSE to create the application then perform a git clone to clone the directory locally. Once this is complete, a list of the application information will be shown. To show this information again, use <code>rhc show-app [appname]</code>.</li>
+		  <li>Execute <code>rhc app create [appname] ruby-1.9 postgresql-9.2 -s</code>. Behind the scenes it will uses the REST API to communicate with OSE to create the application then perform a git clone to clone the directory locally. Once this is complete, a list of the application information will be shown. To show this information again, use <code>rhc show-app [appname]</code>.<code>-s</code> enables auto-scaling.</li>
 		  <li>From the parent directory (one directory up from your application directory), execute <code>rails new [appname]</code>. Say yes to any files it wants to overwrite.</li>
 		  <li>Adjust your Gemfile so the source uses http not https, i.e. <code>source http://rubygems.org</code>. Uncomment <code>gem 'therubyracer'</code>. Execute <code>bundle install</code> to verify this worked. </li>
 		  <li>At this point, you can push to OSE and verify things worked. Do the following:
