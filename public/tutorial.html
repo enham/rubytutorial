@@ -32,7 +32,7 @@
 		  <img src="/assets/dhs-logo.png" height="64"/>
 		</div>
         <div class="navbar-header" style="margin-left: 15px">
-          <a class="navbar-brand" href="#"><strong>USCIS</strong></a>
+          <a class="navbar-brand" href="/grantees"><strong>USCIS</strong></a>
 		</div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -46,7 +46,101 @@
 	<div class="container">
 	  <div class="starter-template">
         <h2>Tutorial</h2>
-		<p>Coming soon!</p>
+		<div class="bg-classes bg-info">
+		  <p><strong>Pre-requisites:</strong> The following software should be installed and available in your local environment:</p>
+		  <ul>
+		    <li>Ruby 1.9.3</li>
+			<li>Rails 3.2.x (if rvm is available, use <code>rvm use ruby-1.9.3</code> command to manage versions and dependencies)</li>
+			<li>rhc (<code>gem install rhc</code>)</li>
+		  </ul>
+		  <p>Also, please note that many aspects of Ruby are platform dependent. If you are using Windows, it may implicitly declare gems in your Gemfile.lock that are Windows-specific and some gems may not work altogether. For this reason, we recommend using a <strong>Linux platform</strong>.
+		</div>
+		<br/>
+		<ol>
+		  <li>Create new directory.</li>
+		  <li>Execute <code>rhc setup --server=[url]</code> (make sure to use https if applicable). Enter your username/password if prompted.</li>
+		  <li>Execute <code>rhc app create [appname] ruby-1.9 postgresql-9.2</code>. Behind the scenes it will uses the REST API to communicate with OSE to create the application then perform a git clone to clone the directory locally. Once this is complete, a list of the application information will be shown. To show this information again, use <code>rhc show-app [appname]</code>.</li>
+		  <li>From the parent directory (one directory up from your application directory), execute <code>rails new [appname]</code>. Say yes to any files it wants to overwrite.</li>
+		  <li>Adjust your Gemfile so the source uses http not https, i.e. <code>source http://rubygems.org</code>. Uncomment <code>gem 'therubyracer'</code>. Execute <code>bundle install</code> to verify this worked. </li>
+		  <li>At this point, you can push to OSE and verify things worked. Do the following:
+		  <pre>git add .<br/>git commit -am "[message]"<br/>git push</pre>
+		  Verify this worked properly by navigating to your application landing page ([appname]-[namespace].[host] or you can follow the link from the web console).</li>
+		  <li>Scaffold your first entity. Execute <code>rails generate scaffold [entityname] [fieldname:type]</code>. We will use SQLite for now.</li>
+		  <li>Next we will add an action hook to run <code>rake db:migrate</code> as part of the deploy step. In the .openshift/action_hooks,create a file called deploy and add the following lines:
+		  <pre>pushd ${OPENSHIFT_REPO_DIR} > /dev/null<br/>echo "Executing rake db:migrate for RAILS_ENV=${RAILS_ENV:-production} and RAILS_DB=${RAILS_DB}..."<br/>bundle exec rake db:migrate RAILS_ENV=${RAILS_ENV:-production}<br/>popd > /dev/null</pre>
+           </li>
+		   <li>Make sure that git captures the file permissions with the following command: <code>git update-index --chmod=+x [path/to/file]</code></li>
+		   <li>Modify your routes to add: <code>root :to => "[entities]#index"</code> where entities is the plural of your entityname. Delete public/index.html. This will set the default route to be the entity page.</li>
+		   <li>Push using git. You should see <code>rake db:migrate</code> execute as part of your workflow. Verify this worked properly by navigating to your application page. Test CRUD for your first entity using SQLite!</li>
+		   
+		  <br/>
+          <div class="bg-classes bg-info">
+		    <p>To facilitate debugging, you can set the environment to be in development mode using: <code>rhc env set RAILS_ENV=development</code>. This will give greater debugging information when you do <code>rhc tail</code>.</p>
+          </div>
+		  <br/>
+		  
+		  <li>Now we will convert this to use PostreSQL. Start by adding <code>gem 'pg'</code> to your Gemfile and running <code>bundle install</code>.</li>
+		  <li>Change your config/database.yml file to the following:
+		  
+		  <br/><br/>
+          <div class="bg-classes bg-warning">
+		    <p>If you copy and paste the below configuration make sure the indenting is correct as per yml standards.</p>
+          </div>
+		  <br/>
+		  
+		  <pre>sqlite: &sqlite
+  adapter: sqlite3
+  database: db/&lt;%= Rails.env %&gt;.sqlite3
+
+mysql: &mysql
+  adapter: mysql2
+  database: "&lt;%=ENV['OPENSHIFT_APP_NAME']%&gt;"
+  username: "&lt;%=ENV['OPENSHIFT_MYSQL_DB_USERNAME']%&gt;"
+  password: "&lt;%=ENV['OPENSHIFT_MYSQL_DB_PASSWORD']%&gt;"
+  host: &lt;%=ENV['OPENSHIFT_MYSQL_DB_HOST']%&gt;
+  port: &lt;%=ENV['OPENSHIFT_MYSQL_DB_PORT']%&gt;
+
+postgresql: &postgresql
+  adapter: postgresql
+  database: &lt;%=ENV['OPENSHIFT_APP_NAME']%&gt;
+  username: &lt;%=ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME']%&gt;
+  password: &lt;%=ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD']%&gt;
+  host: &lt;%=ENV['OPENSHIFT_POSTGRESQL_DB_HOST']%&gt;
+  port: &lt;%=ENV['OPENSHIFT_POSTGRESQL_DB_PORT']%&gt;
+  min_messages: ERROR
+  reconnect: false
+
+defaults: &defaults
+  pool: 5
+  timeout: 5000
+  encoding: utf8
+  <<: *&lt;%= ENV['RAILS_DB'] || "sqlite" %&gt;
+
+development:
+  <<: *defaults
+
+test: &test
+  <<: *defaults
+
+production:
+  <<: *defaults</pre>
+          This also requires an environment variable to be set: <code>rhc env set RAILS_DB=postgresql</code></li>
+		  <li>Push using git and verify this worked properly by navigating to your application landing page.</li>
+		  <li>Next, we will add a better look and feel using Bootstrap. For the purposes of this demo, just link the CDN maintained css and js files by adding the following to application.html.erb:
+		  
+		  <pre>&lt;!-- Latest compiled and minified CSS --&gt;
+&lt;link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"&gt;
+
+&lt;!-- Optional theme --&gt;
+&lt;link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css"&gt;
+
+&lt;!-- Latest compiled and minified JavaScript --&gt;
+&lt;script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"&gt;&lt;/script&gt;
+</pre>
+          </li>
+		  <li>Modify your entity views to use the bootstrap styles (in app/views/[entity] directories). Some examples are available here: <a href="http://getbootstrap.com/css/">http://getbootstrap.com/css/</a></li>
+		  <li>For this demo, I created a nested object in Rails. This is fairly complex. This guide summarizes it but some additional changes will probably have to be made to make it work: <a href="https://gist.github.com/jhjguxin/3074080">https://gist.github.com/jhjguxin/3074080</a>. To add a child entity, you can use the following scaffolding syntax: <code>rails g scaffold [childentity] [fields:types] [parent:references]</code></li>
+		</ol>
 	  </div>
 	</div>
 

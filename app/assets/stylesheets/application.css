@@ -19,22 +19,25 @@ body {
   padding: 40px 15px;
 }
 input[name=commit] {
-margin-top: 10px;
-display: inline-block;
-margin-bottom: 0px;
-font-weight: 400;
-text-align: center;
-vertical-align: middle;
-cursor: pointer;
-background-image: none;
-border: 1px solid transparent;
-white-space: nowrap;
-padding: 6px 12px;
-font-size: 14px;
-line-height: 1.42857;
-border-radius: 4px;
--moz-user-select: none;
-color: #FFF;
-background-color: #428BCA;
-border-color: #357EBD;
+  margin-top: 10px;
+  display: inline-block;
+  margin-bottom: 0px;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857;
+  border-radius: 4px;
+  -moz-user-select: none;
+  color: #FFF;
+  background-color: #428BCA;
+  border-color: #357EBD;
+}
+.bg-classes p {
+  padding: 15px;
 }
