@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CitizenshipClassTest < ActiveSupport::TestCase
+class CitizenshipClassTest
   # test "the truth" do
   #   assert true
   # end
