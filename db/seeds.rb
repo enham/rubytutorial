@@ -5,3 +5,10 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+#Grantee.create(
+#  name: 'Annandale Immigration Center',
+#  address: '123 Little River Turnpike, Annandale, VA',
+#  grant_amount: 250000,
+#  grant_date: Date.parse('2014-06-09')
+#)
