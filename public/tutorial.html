@@ -45,7 +45,7 @@
 	
 	<div class="container">
 	  <div class="starter-template">
-        <h2>Tutorial</h2>
+        <h2>Tutorial: Ruby on Rails Demo Application on OpenShift</h2>
 		<div class="bg-classes bg-success">
 		  <p>Code for this demo can be found at <a href="https://github.com/enham/rubydemo" target="_new">https://github.com/enham/rubydemo</a>. Make sure to <code>bundle install</code> to resolve any platform dependencies before pushing to OpenShift.</p>
 		</div>
@@ -60,6 +60,7 @@
 		  <p>Also, please note that many aspects of Ruby are platform dependent. If you are using Windows, it may implicitly declare gems in your Gemfile.lock that are Windows-specific and some gems may not work altogether. For this reason, we recommend using a <strong>Linux platform</strong>.</p>
 		</div>
 		<br/>
+		<h4>Setting up a basic Ruby on Rails project in OpenShift</h4>
 		<ol>
 		  <li>Create new directory.</li>
 		  <li>Execute <code>rhc setup --server=[url]</code> (make sure to use https if applicable). Enter your username/password if prompted.</li>
@@ -67,13 +68,13 @@
 		  <li>From the parent directory (one directory up from your application directory), execute <code>rails new [appname]</code>. Say yes to any files it wants to overwrite.</li>
 		  <li>Adjust your Gemfile so the source uses http not https, i.e. <code>source http://rubygems.org</code>. Uncomment <code>gem 'therubyracer'</code>. Execute <code>bundle install</code> to verify this worked. </li>
 		  <li>At this point, you can push to OSE and verify things worked. Do the following:
-		  <pre>git add .<br/>git commit -am "[message]"<br/>git push</pre>
+		  <pre>git add .<br/>git commit -m "[message]"<br/>git push</pre>
 		  Verify this worked properly by navigating to your application landing page ([appname]-[namespace].[host] or you can follow the link from the web console).</li>
 		  <li>Scaffold your first entity. Execute <code>rails generate scaffold [entityname] [fieldname:type]</code>. We will use SQLite for now.</li>
 		  <li>Next we will add an action hook to run <code>rake db:migrate</code> as part of the deploy step. In the .openshift/action_hooks,create a file called deploy and add the following lines:
 		  <pre>pushd ${OPENSHIFT_REPO_DIR} > /dev/null<br/>echo "Executing rake db:migrate for RAILS_ENV=${RAILS_ENV:-production} and RAILS_DB=${RAILS_DB}..."<br/>bundle exec rake db:migrate RAILS_ENV=${RAILS_ENV:-production}<br/>popd > /dev/null</pre>
            </li>
-		   <li>Make sure that git captures the file permissions with the following command: <code>git update-index --chmod=+x [path/to/file]</code></li>
+		   <li>Add the file to git and also make sure that git captures the file permissions with the following command: <code>git update-index --chmod=+x [path/to/file]</code></li>
 		   <li>Modify your routes to add: <code>root :to => "[entities]#index"</code> where entities is the plural of your entityname. Delete public/index.html. This will set the default route to be the entity page.</li>
 		   <li>Push using git. You should see <code>rake db:migrate</code> execute as part of your workflow. Verify this worked properly by navigating to your application page. Test CRUD for your first entity using SQLite!</li>
 		   
@@ -82,7 +83,9 @@
 		    <p>To facilitate debugging, you can set the environment to be in development mode using: <code>rhc env set RAILS_ENV=development</code>. This will give greater debugging information when you do <code>rhc tail</code>.</p>
           </div>
 		  <br/>
-		  
+		</ol>
+		<h4>Converting your project to PostgreSQL</h4>
+		<ol>
 		  <li>Now we will convert this to use PostreSQL. Start by adding <code>gem 'pg'</code> to your Gemfile and running <code>bundle install</code>.</li>
 		  <li>Change your config/database.yml file to the following:
 		  
@@ -118,7 +121,7 @@ defaults: &defaults
   pool: 5
   timeout: 5000
   encoding: utf8
-  <<: *&lt;%= ENV['RAILS_DB'] || "sqlite" %&gt;
+  <<: *&lt;%= ENV['RAILS_DB'] || "postgresql" %&gt;
 
 development:
   <<: *defaults
@@ -130,6 +133,9 @@ production:
   <<: *defaults</pre>
           This also requires an environment variable to be set: <code>rhc env set RAILS_DB=postgresql</code></li>
 		  <li>Push using git and verify this worked properly by navigating to your application landing page.</li>
+		</ol>
+		<h4>Adding styling with bootstrap</h4>
+		<ol>
 		  <li>Next, we will add a better look and feel using Bootstrap. For the purposes of this demo, just link the CDN maintained css and js files by adding the following to application.html.erb:
 		  
 		  <pre>&lt;!-- Latest compiled and minified CSS --&gt;
@@ -143,9 +149,23 @@ production:
 </pre>
           </li>
 		  <li>Modify your entity views to use the bootstrap styles (in app/views/[entity] directories). Some examples are available here: <a href="http://getbootstrap.com/css/" target="_new">http://getbootstrap.com/css/</a></li>
+		</ol>
+		<h4>Other enhancements</h4>
+		<ol>
 		  <li>For this demo, I created a nested object in Rails. This is fairly complex. This guide summarizes it but some additional changes will probably have to be made to make it work: <a href="https://gist.github.com/jhjguxin/3074080" target="_new">https://gist.github.com/jhjguxin/3074080</a>. To add a child entity, you can use the following scaffolding syntax: <code>rails g scaffold [childentity] [fields:types] [parent:references]</code></li>
 		  <li>To add login, follow the steps in this tutorial: <a href="http://guides.railsgirls.com/devise/" target="_new">http://guides.railsgirls.com/devise/</a>. One correction: in step 6, I had to use <code>before_action</code> not <code>before_filter</code>.</li>
-		  <li>To add Jenkins, I used the UI. First, I added a new Jenkins server. Then, I went to my existing application and clicked Enable Jenkins. All done!
+		  <li>To add Jenkins, I used the UI. First, I added a new Jenkins server. Then, I went to my existing application and clicked Enable Jenkins. All done!</li>
+		  <li>To add seed data, modify your deploy script and add the following lines after your <code>rake db:migrate</code>:
+		    <pre>echo "Executing rake db:seed"
+bundle exec rake db:seed RAILS_ENV=${RAILS_ENV:-production}</pre>
+            Next, create sample data in the file db/seeds.rb. For my entities, my seeds.rb looks like:
+			<pre>Grantee.create(
+  name: 'Test Grantee',
+  address: '123 Test Street',
+  grant_amount: 100000,
+  grant_date: Date.parse('2014-06-09')
+)</pre>
+		  </li>
 		</ol>
 	  </div>
 	</div>
