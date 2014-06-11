@@ -69,14 +69,14 @@
 		  <li>Adjust your Gemfile so the source uses http not https, i.e. <code>source http://rubygems.org</code>. Uncomment <code>gem 'therubyracer'</code>. Execute <code>bundle install</code> to verify this worked. </li>
 		  <li>At this point, you can push to OSE and verify things worked. Do the following:
 		  <pre>git add .<br/>git commit -m "[message]"<br/>git push</pre>
-		  Verify this worked properly by navigating to your application landing page ([appname]-[namespace].[host] or you can follow the link from the web console).</li>
+		  Verify this worked properly by navigating to your application landing page (http://[appname]-[namespace].[host] or you can follow the link from the web console).</li>
 		  <li>Scaffold your first entity. Execute <code>rails generate scaffold [entityname] [fieldname:type]</code>. We will use SQLite for now.</li>
 		  <li>Next we will add an action hook to run <code>rake db:migrate</code> as part of the deploy step. In the .openshift/action_hooks,create a file called deploy and add the following lines:
 		  <pre>pushd ${OPENSHIFT_REPO_DIR} > /dev/null<br/>echo "Executing rake db:migrate for RAILS_ENV=${RAILS_ENV:-production} and RAILS_DB=${RAILS_DB}..."<br/>bundle exec rake db:migrate RAILS_ENV=${RAILS_ENV:-production}<br/>popd > /dev/null</pre>
            </li>
 		   <li>Add the file to git and also make sure that git captures the file permissions with the following command: <code>git update-index --chmod=+x [path/to/file]</code></li>
 		   <li>Modify your routes to add: <code>root :to => "[entities]#index"</code> where entities is the plural of your entityname. Delete public/index.html. This will set the default route to be the entity page.</li>
-		   <li>Push using git. You should see <code>rake db:migrate</code> execute as part of your workflow. Verify this worked properly by navigating to your application page. Test CRUD for your first entity using SQLite!</li>
+		   <li>Add, commit, and push using git. You should see <code>rake db:migrate</code> execute as part of your workflow. Verify this worked properly by navigating to your application page. Test CRUD for your first entity using SQLite!</li>
 		   
 		  <br/>
           <div class="bg-classes bg-info">
@@ -153,8 +153,8 @@ production:
 		<h4>Other enhancements</h4>
 		<ol>
 		  <li>For this demo, I created a nested object in Rails. This is fairly complex. This guide summarizes it but some additional changes will probably have to be made to make it work: <a href="https://gist.github.com/jhjguxin/3074080" target="_new">https://gist.github.com/jhjguxin/3074080</a>. To add a child entity, you can use the following scaffolding syntax: <code>rails g scaffold [childentity] [fields:types] [parent:references]</code></li>
-		  <li>To add login, follow the steps in this tutorial: <a href="http://guides.railsgirls.com/devise/" target="_new">http://guides.railsgirls.com/devise/</a>. One correction: in step 6, I had to use <code>before_action</code> not <code>before_filter</code>.</li>
-		  <li>To add Jenkins, I used the UI. First, I added a new Jenkins server. Then, I went to my existing application and clicked Enable Jenkins. All done!</li>
+		  <li>To add login, follow the steps in this tutorial: <a href="http://guides.railsgirls.com/devise/" target="_new">http://guides.railsgirls.com/devise/</a>. One correction: in step 6, I had to use <code>before_action :authenticate_user!</code> not <code>before_filter</code> in app/controller/application_controller.rb.</li>
+		  <li>To add Jenkins, I used the web console. First, I added a new Jenkins server. Then, I went to my existing application and clicked Enable Jenkins. All done!</li>
 		  <li>To add seed data, modify your deploy script and add the following lines after your <code>rake db:migrate</code>:
 		    <pre>echo "Executing rake db:seed"
 bundle exec rake db:seed RAILS_ENV=${RAILS_ENV:-production}</pre>
@@ -166,6 +166,21 @@ bundle exec rake db:seed RAILS_ENV=${RAILS_ENV:-production}</pre>
   grant_date: Date.parse('2014-06-08')
 )</pre>
 		  </li>
+		</ol>
+		<h4>Auto-scaling demo</h4>
+		<div class="bg-classes bg-warning">
+		  <p><strong>Pre-requisites:</strong> In order to do this demo, you have to have added the <code>-s</code> flag to enable auto-scaling when creating your application in OpenShift.</p>
+		</div>
+		<ol>		
+		  <li>Using the application we just built, we will now demonstrate auto-scaling. If you implemented Devise for login, please disable enforced login for the purposes of this test by commenting out <code>before_action :authenticate_user!</code> in app/controller/application_controller.rb.</li>
+		  <li>Download the following file and put it in action_hooks: <a href="haproxy_ctld.rb.txt" target="_new">haproxy_ctld.rb.txt</a>. Remove the .txt extension. Make it executable with <code>git update-index --chmod=+x [path/to/file]</code>. This file overrides the haproxy logic and sets it to auto-scale with the used memory is greater than 1MB (search <code>mem_scale_up</code> to see limits).</li>
+		  <li>Create a new job in <a href="http://blazemeter.com/" target="_new">Blazemeter</a>. Configure it to hit your REST endpoint ([entities].json). I used 20 users with a 5 second delay and the Extreme Stress pattern. Save the test.</li>
+		  <li>Navigate to your HA Proxy Status page (either through the link in the OpenShift web console or by navigating to http://[appname]-[namespace].[host]/haproxy-status/). It should look something like this: <br/><img src="autoscaling-before.png" width="800"/></li>
+		  <li>Start your test in Blazemeter. Give it a few seconds to start up and create load.</li>
+          <div class="bg-classes bg-info">
+		    <p>It may help if you seed a lot of data.</p>
+          </div>
+		  <li>Refresh your HA Proxy Status page. You may see some gears in down status before it really gets going. Eventually you'll have two gears up and running. It will look something like this: <br/><img src="autoscaling-after.png" width="800"/></li>
 		</ol>
 	  </div>
 	</div>
